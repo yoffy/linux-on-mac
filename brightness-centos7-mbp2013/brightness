@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -z "${1}" ]; then
+	echo -e "`basename ${0}` <brightness>"
+	echo -e ""
+	echo -e "\tbrightness: 0-1023"
+	exit 1
+fi
+
+echo "${1}" > /sys/class/backlight/gmux_backlight/brightness 
