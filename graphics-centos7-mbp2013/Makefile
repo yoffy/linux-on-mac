@@ -6,7 +6,7 @@
 MY_DISTRO_PREFIX=/usr
 MY_DISTRO_LIBDIR=/usr/lib64
 MY_DISTRO_INCLUDE=/usr/include
-LINUX=linux-4.9
+LINUX=linux-4.9.11
 LIBDRM=libdrm-2.4.75
 XORG_SERVER=xorg-server-1.19.1
 XPROTO=xproto-7.0.31
@@ -98,7 +98,7 @@ $(MY_DISTRO_INCLUDE)/openssl/opensslv.h:
 
 $(LINUX)/.config: $(LINUX).tar.xz
 	tar xf $(LINUX).tar.xz
-	cp `ls -t /boot/config* | head -1` "$(LINUX)/.config"
+	$(MAKE) patch-kernel-mac
 
 $(LINUX).tar.xz:
 	curl -LOS# "https://www.kernel.org/pub/linux/kernel/v4.x/$(LINUX).tar.xz"
@@ -109,7 +109,6 @@ patch-kernel-mac: $(LINUX)/.config
 	curl -LS# -o kernel-eboot.patch   "https://lists.gnu.org/archive/html/grub-devel/2014-11/txtf1YcLj5EQ1.txt"
 	patch -p1 -d $(LINUX) < kernel-eboot.patch
 	touch $(LINUX)/.config
-	echo "Add acpi_block_gpe=0x06 to boot parameter (/etc/grub2-efi.config etc.)"
 
 #
 # libdrm
